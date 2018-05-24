@@ -4,7 +4,7 @@
 /*                              */
 /* This is a Rule 110 simulator */
 /*  written in Brainfuck which  */
-/**  is fed to an interpreter  **/
+/** is fed into an interpreter **/
 /****      written in C.     ****/
 /********************************/
 
