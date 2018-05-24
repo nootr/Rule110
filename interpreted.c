@@ -10,8 +10,8 @@
 
         #include <stdio.h>
         #include<stdlib.h>
-        int main() {char l
-        ,*m=calloc(999,1),
+        int main(){char l,
+        *m=calloc(999,99),
 	*p=m,c[326]="%c\0"
 
 "->>>+[->>>,----------]>>>-<<<<<<"
