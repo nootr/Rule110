@@ -1,0 +1,70 @@
+                            # Note: each cell uses 3 memory cells. Let's call
+                            # the cells "Input cell", "first buffer" and "second
+                            # buffer". The "third buffer" is the first buffer in
+                            # the next cell.
+
+                            ### Fetch input
+->>>                        # Create a [-1] cell as start marking
++[->>>,----------]          # Fetch input until `\n` is given (ASCII 10)
+                            # This has left each character with -11.
+>>>-                        # Create another [-1] cell as end
+<<<<<<                      # Move to last input (before the '\n')
+                            #
+                            ### Convert char to int
+[                           # For each input character:
+  >>++++++                  #   Second buffer := 6
+  [-<++++++>]               #   Second buffer := 0, first buffer := 36
+  <+                        #   First cell := 37
+  [-<->]                    #   Input cell -= 37 ('0'->0, '1'->1)
+  <<<<                      #   Move to previous cell
+]                           #
+                            ### Calculate next state
+>>>                         # Move to the first input cell
++[                          # while true:
+  [-                        #  while cell != [-1] (end mark):
+   [->+>+<<]                #   Move input cell to both buffers
+   >>[-<<+>>]               #   Move second buffer back to input cell
+   >[-<+<+>>>+<]            #   Move next input cell to 1st, 2nd and 3rd buffers
+   <[->+<]                  #   Move second buffer back to next input cell
+                            #     So it's (starting at input cell):
+                            #      < i[N], i[N]+i[N+1], 0, i[N+1], i[N+1], ... >
+   <<[->>+>>+<<<<]          #   Move the input to the second and third buffer
+   >>[-<<+>>]               #   Move the second buffer back to the input cell
+                            #      < i[N], i[N]+i[N+1], 0, i[N+1], i[N+1]+i[N] >
+   <<<<<[->>>>>+>>+<<<<<<<] #   Move previous input to the 2nd and 3rd buffer
+   >>>>>[-<<<<<+>>>>>]      #   Move 2nd buffer back to previous input.
+                            # <i[N], i[N]+i[N+1], 0, i[N+1], i[N+1]+i[N]+i[N-1]>
+   >>---[                   #   if 3rd buffer != 3 \
+   <<<[                     #     and 1st buffer != 0:
+                            #       so !(i[N+1]*i[N]*i[N-1]) * (i[N] + i[N+1])
+   >+<[-]]                  #     Set 2nd buffer
+   >>>[+]]                  #   3rd buffer := 0
+   <<<[-]                   #   1st buffer := 0
+   >>+]                     #   Repeat for next cell.
+                            #
+                            #  Each 2nd buffer now contains the next state.
+                            #
+                            ### Shift so each 2nd buffer becomes the input cell
+>>-                         #  Create new [-1] to mark end
+<<<[-]                      #  Cleanup invalid last 2nd buffer
+<<+[[-]<<<+]                #  while input != [-1]: input := 0
+>>-                         #  Create new [-1] to mark start
+                            #
+                            ### Print results
+>>>>>>                      #  Move to first input cell
++[-                         #  for each cell (until [-1] end marker is reached):
+  [->+<]                    #   Move input cell to 1st buffer
+  >>++++                    #   2nd buffer := 4
+  [->>++++<<]               #   2nd buffer := 0, 3rd buffer := 16
+  >>[-<<++>>]               #   2nd buffer := 32(' '), 3rd buffer := 0
+  <<<[                      #   if 1st buffer == 1:
+    >+++<-<+>               #     2nd buffer := 35('#'), 1st buffer := 0, input
+  ]                         #                              cell := 1
+  >.                        #   print(2nd buffer)
+  [-]                       #   2nd buffer := 0
+  >+]                       #   Repeat for next cell
+,[-]                        #  Wait for input, delete result
+-<                          #  Reset [-1] mark for end
++[-<+]-                     #  Goto [-1] mark for start
+>>>>>>                      #  Move to the first cell
++=]                         # end while true, don't forget the =] smiley!
