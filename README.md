@@ -7,4 +7,4 @@ $ ./rule110
 ```
 
 # Example output
-![Example](http://curlba.sh/jhartog/Rule110/raw/master/example.png)
+![Example](example.png)
