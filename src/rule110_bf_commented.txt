@@ -1,10 +1,19 @@
                             # Note: each cell uses 3 memory cells. Let's call
-                            # the cells "Input cell", "first buffer" and "second
-                            # buffer". The "third buffer" is the first buffer in
-                            # the next cell.
-
+                            # the memory cells "Input cell", "first buffer" and
+                            # "second buffer". The "third buffer" is the first
+                            # buffer in the next cell.
+                            # ,-----,-----,----
+                            # I | | Ix| | I | |
+                            #  |     | | | | `- 3rd buffer
+                            #  |     | | | `--- Next input cell
+                            #  |     | | `----- Second buffer
+                            #  |     | `------- First buffer
+                            #  |     `--------- (Current) input cell
+                            #  `--------------- Previous input cell
+                            #
                             ### Fetch input
-->>>                        # Create a [-1] cell as start marking
+->>>                        # Create a [-1] cell as start marking,
+                            #  note that [-1] is easy to goto with e.g. `+[-<+]-`
 +[->>>,----------]          # Fetch input until `\n` is given (ASCII 10)
                             # This has left each character with -11.
 >>>-                        # Create another [-1] cell as end
@@ -44,7 +53,7 @@
                             #
                             #  Each 2nd buffer now contains the next state.
                             #
-                            ### Shift so each 2nd buffer becomes the input cell
+                            ### Shift so each 2nd buffer becomes the new input cell
 >>-                         #  Create new [-1] to mark end
 <<<[-]                      #  Cleanup invalid last 2nd buffer
 <<+[[-]<<<+]                #  while input != [-1]: input := 0
